@@ -14,7 +14,7 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   cenario = new Cenario(imagemCenario, 3);
-  personagem = new Personagem(imagemPersonagem);
+  personagem = new Personagem(imagemPersonagem, 4, 4, 0.28);
   somDoJogo.loop();
 }
 
