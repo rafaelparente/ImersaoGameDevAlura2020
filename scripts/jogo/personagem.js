@@ -1,6 +1,6 @@
 class Personagem {
 
-    constructor(imagem, numCols, numLins, propAltura) {
+    constructor(imagem, numCols, numLins, propAltura, velocidade) {
         this.imagem = imagem;
         this.alturaNaImagem = imagem.height / numLins;
         this.larguraNaImagem = imagem.width / numCols;
@@ -9,6 +9,9 @@ class Personagem {
         this.x = 0;
         this.y = height - this.altura;
         this.frameAtual = 0;
+        this.velocidade = velocidade;
+        this.frameSkip = 0;
+
         this.criaMatriz(numLins, numCols);
     }
 
@@ -35,11 +38,16 @@ class Personagem {
             this.matriz[this.frameAtual][0], this.matriz[this.frameAtual][1],
             this.larguraNaImagem, this.alturaNaImagem
         );
+        
         this.atualizaFrame();
     }
 
     atualizaFrame() {
-        this.frameAtual = ++this.frameAtual % this.matriz.length;
+        this.frameSkip = ++this.frameSkip % this.velocidade;
+        
+        if (this.frameSkip == 0) {
+            this.frameAtual = ++this.frameAtual % this.matriz.length;
+        }
     }
 
 }
