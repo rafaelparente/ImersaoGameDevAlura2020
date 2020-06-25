@@ -1,53 +1,38 @@
-class Personagem {
+class Personagem extends Animacao {
 
-    constructor(imagem, numCols, numLins, propAltura, velocidade) {
-        this.imagem = imagem;
-        this.alturaNaImagem = imagem.height / numLins;
-        this.larguraNaImagem = imagem.width / numCols;
-        this.altura = height * propAltura;
-        this.largura = (this.altura / this.alturaNaImagem) * this.larguraNaImagem;
+    constructor(imagem, numCols, numLins, propAltura, velocidadeAnimacao) {        
+        super(imagem, numCols, numLins, propAltura, velocidadeAnimacao);
+
+        this.yInicial = height - this.altura
+
         this.x = 0;
-        this.y = height - this.altura;
-        this.frameAtual = 0;
-        this.velocidade = velocidade;
-        this.frameSkip = 0;
+        this.y = this.yInicial;
 
-        this.criaMatriz(numLins, numCols);
+        this.velocidadeDoPulo = 0;
+        this.gravidade = 3;
     }
 
-    criaMatriz(numLins, numCols) {
-        this.matriz = [];
-        let lin = 0;
+    pula() {
+        this.velocidadeDoPulo = -42;
+    }
 
-        for (; lin < numLins; ++lin) {
-            let linCoord = lin * this.alturaNaImagem;
-            let col = 0;
+    aplicaGravidade() {
+        this.y += this.velocidadeDoPulo;
+        this.velocidadeDoPulo += this.gravidade;
 
-            for (; col < numCols; ++col) {
-                let colCoord = col * this.larguraNaImagem;
-                this.matriz.push([colCoord, linCoord]);
-            }
+        if (this.y > this.yInicial) {
+            this.y = this.yInicial;
         }
     }
 
-    exibe() {
-        image(
-            this.imagem,
+    estaColidindo(inimigo) {
+        const precisao = .7;
+
+        return collideRectRect(
             this.x, this.y,
-            this.largura, this.altura,
-            this.matriz[this.frameAtual][0], this.matriz[this.frameAtual][1],
-            this.larguraNaImagem, this.alturaNaImagem
-        );
-        
-        this.atualizaFrame();
-    }
-
-    atualizaFrame() {
-        this.frameSkip = ++this.frameSkip % this.velocidade;
-        
-        if (this.frameSkip == 0) {
-            this.frameAtual = ++this.frameAtual % this.matriz.length;
-        }
+            this.largura * precisao, this.altura * precisao,
+            inimigo.x, inimigo.y,
+            inimigo.largura * precisao, inimigo.altura * precisao);
     }
 
 }
