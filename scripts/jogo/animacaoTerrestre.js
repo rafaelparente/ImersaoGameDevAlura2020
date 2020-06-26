@@ -4,6 +4,7 @@ class AnimacaoTerrestre extends Animacao {
         super(imagem, numCols, numLins, propAltura, velocidadeAnimacao);
 
         this.y = height - this.altura;
+        this.contadorDePulos = 0;
     }
 
 }

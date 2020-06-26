@@ -5,6 +5,7 @@ const numColsDeImagemPersonagem = 4;
 const numLinsDeImagemPersonagem = 4;
 const personagemPropAltura = 0.25;
 const personagemPropPulo = 0.05;
+const personagemLimiteDePulo = 2;
 
 const numColsDeImagemInimigo = 4;
 const numLinsDeImagemInimigo = 7;
@@ -47,7 +48,7 @@ function setup() {
     cenario = new Cenario(imagemCenario, velocidadeAnimacao);
     personagem = new Personagem(imagemPersonagem,
         numColsDeImagemPersonagem, numLinsDeImagemPersonagem, personagemPropAltura,
-        velocidadeAnimacao, personagemPropPulo, propGravidade, precisaoDaColisao);
+        velocidadeAnimacao, personagemPropPulo, propGravidade, precisaoDaColisao, personagemLimiteDePulo);
     inimigo = new Inimigo(imagemInimigo,
         numColsDeImagemInimigo, numLinsDeImagemInimigo, inimigoPropAltura,
         velocidadeAnimacao, inimigoPropMovimentacao);
@@ -57,8 +58,9 @@ function setup() {
 
 function keyPressed() {
     if (key == ' ' && isLooping) {
-        personagem.pula();
-        somDoPulo.play();
+        if (personagem.pula()) {
+            somDoPulo.play();
+        }
     }
 }
 

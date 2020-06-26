@@ -1,6 +1,6 @@
 class Personagem extends AnimacaoTerrestre {
 
-    constructor(imagem, numCols, numLins, propAltura, velocidadeAnimacao, personagemPropPulo, propGravidade, precisaoDaColisao) {        
+    constructor(imagem, numCols, numLins, propAltura, velocidadeAnimacao, personagemPropPulo, propGravidade, precisaoDaColisao, limiteDePulo) {        
         super(imagem, numCols, numLins, propAltura, velocidadeAnimacao);
 
         this.yInicial = this.y;
@@ -10,12 +10,19 @@ class Personagem extends AnimacaoTerrestre {
         this.larguraDeColisao = this.largura * precisaoDaColisao;
         this.alturaDeColisao = this.altura * precisaoDaColisao;
         this.precisaoDaColisao = precisaoDaColisao;
+        this.limiteDePulo = limiteDePulo;
 
         this.x = 0;
     }
 
     pula() {
+        if (this.contadorDePulos >= this.limiteDePulo) {
+            return false;
+        }
+        
         this.velocidadeDoPulo = this.aceleracaoDoPulo;
+        this.contadorDePulos++;
+        return true;
     }
 
     aplicaGravidade() {
@@ -24,6 +31,7 @@ class Personagem extends AnimacaoTerrestre {
 
         if (this.y > this.yInicial) {
             this.y = this.yInicial;
+            this.contadorDePulos = 0;
         }
     }
 
