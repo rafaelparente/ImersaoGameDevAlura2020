@@ -1,54 +1,81 @@
+const propTamanhoTelaDeGameOver = 0.7;
+const corDeFundoTelaDeGameOver = 'rgba(0, 0, 0, 0.7)';
+
 const numColsDeImagemPersonagem = 4;
 const numLinsDeImagemPersonagem = 4;
 const personagemPropAltura = 0.25;
+const personagemPropPulo = 0.05;
+
 const numColsDeImagemInimigo = 4;
 const numLinsDeImagemInimigo = 7;
 const inimigoPropAltura = 0.1;
-const velocidadeMovimentacaoDoInimigo = 10;
+const inimigoPropMovimentacao = 0.01;
+
 const velocidadeAnimacao = 3;
+const precisaoDaColisao = 0.7;
+const propGravidade = 0.1;
 
 let imagemCenario;
 let imagemPersonagem;
 let imagemInimigo;
+let imagemGameOver;
+
 let somDoJogo;
 let somDoPulo;
+
+let gameOver;
 let cenario;
 let personagem;
+let inimigo;
+
+let isLooping = true;
 
 function preload() {
-  imagemCenario = loadImage('./imagens/cenario/floresta.png');
-  imagemPersonagem = loadImage('./imagens/personagem/correndo.png');
-  imagemInimigo = loadImage('./imagens/inimigos/gotinha.png');
-  somDoJogo = loadSound('./sons/trilha_jogo.mp3');
-  somDoPulo = loadSound('./sons/somPulo.mp3');
+    imagemGameOver = loadImage('./imagens/assets/game-over.png');
+    imagemCenario = loadImage('./imagens/cenario/floresta.png');
+    imagemPersonagem = loadImage('./imagens/personagem/correndo.png');
+    imagemInimigo = loadImage('./imagens/inimigos/gotinha.png');
+
+    somDoJogo = loadSound('./sons/trilha_jogo.mp3');
+    somDoPulo = loadSound('./sons/somPulo.mp3');
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  cenario = new Cenario(imagemCenario, velocidadeAnimacao);
-  personagem = new Personagem(imagemPersonagem, numColsDeImagemPersonagem, numLinsDeImagemPersonagem, personagemPropAltura, velocidadeAnimacao);
-  inimigo = new Inimigo(imagemInimigo, numColsDeImagemInimigo, numLinsDeImagemInimigo, inimigoPropAltura, velocidadeAnimacao, velocidadeMovimentacaoDoInimigo);
-  somDoJogo.loop();
+    createCanvas(windowWidth, windowHeight);
+
+    gameOver = new GameOver(imagemGameOver, propTamanhoTelaDeGameOver, corDeFundoTelaDeGameOver);
+    cenario = new Cenario(imagemCenario, velocidadeAnimacao);
+    personagem = new Personagem(imagemPersonagem,
+        numColsDeImagemPersonagem, numLinsDeImagemPersonagem, personagemPropAltura,
+        velocidadeAnimacao, personagemPropPulo, propGravidade, precisaoDaColisao);
+    inimigo = new Inimigo(imagemInimigo,
+        numColsDeImagemInimigo, numLinsDeImagemInimigo, inimigoPropAltura,
+        velocidadeAnimacao, inimigoPropMovimentacao);
+    
+    somDoJogo.loop();
 }
 
 function keyPressed() {
-  if (key == ' ') {
-    personagem.pula();
-    somDoPulo.play();
-  }
+    if (key == ' ' && isLooping) {
+        personagem.pula();
+        somDoPulo.play();
+    }
 }
 
 function draw() {
-  cenario.exibe();
-  cenario.move();
+    cenario.exibe();
+    cenario.anima();
 
-  personagem.exibe();
-  personagem.aplicaGravidade();
+    personagem.exibe();
+    personagem.aplicaGravidade();
 
-  inimigo.exibe();
-  inimigo.move();
+    inimigo.exibe();
+    inimigo.move();
 
-  if (personagem.estaColidindo(inimigo)) {
-    noLoop();
-  }
+    if (personagem.estaColidindo(inimigo)) {
+        isLooping = false;
+        gameOver.exibe();
+        somDoJogo.setVolume(0, 3);
+        noLoop();
+    }
 }

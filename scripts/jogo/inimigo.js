@@ -1,23 +1,19 @@
-class Inimigo extends Animacao {
+class Inimigo extends AnimacaoTerrestre {
 
-    constructor(imagem, numCols, numLins, propAltura, velocidadeAnimacao, velocidadeMovimentacao) {
+    constructor(imagem, numCols, numLins, propAltura, velocidadeAnimacao, inimigoPropMovimentacao) {
         super(imagem, numCols, numLins, propAltura, velocidadeAnimacao);
 
-        this.resetaX();
-        this.y = height - this.altura;
+        this.xInicial = width;
+        this.velocidadeMovimentacao = width * inimigoPropMovimentacao;
 
-        this.velocidadeMovimentacao = velocidadeMovimentacao;
-    }
-
-    resetaX() {
-        this.x = width;
+        this.x = this.xInicial;
     }
 
     move() {
         this.x -= this.velocidadeMovimentacao;
 
         if (this.x <= -this.larguraSprite) {
-            this.resetaX();
+            this.x = this.xInicial;
         }
     }
 

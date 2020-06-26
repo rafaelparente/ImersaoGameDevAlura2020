@@ -7,7 +7,7 @@ class Animacao {
         this.altura = height * propAltura;
         this.largura = (this.altura / this.alturaSprite) * this.larguraSprite;
         this.frameAtual = 0;
-        this.velocidade = velocidadeAnimacao;
+        this.velocidadeAnimacao = velocidadeAnimacao;
         this.frameSkip = 0;
 
         this.criaMatriz(numLins, numCols);
@@ -18,11 +18,11 @@ class Animacao {
         let lin = 0;
 
         for (; lin < numLins; ++lin) {
-            let linCoord = lin * this.alturaSprite;
+            const linCoord = lin * this.alturaSprite;
             let col = 0;
 
             for (; col < numCols; ++col) {
-                let colCoord = col * this.larguraSprite;
+                const colCoord = col * this.larguraSprite;
                 this.matriz.push([colCoord, linCoord]);
             }
         }
@@ -41,7 +41,7 @@ class Animacao {
     }
 
     atualizaFrame() {
-        this.frameSkip = ++this.frameSkip % this.velocidade;
+        this.frameSkip = ++this.frameSkip % this.velocidadeAnimacao;
         
         if (this.frameSkip == 0) {
             this.frameAtual = ++this.frameAtual % this.matriz.length;
