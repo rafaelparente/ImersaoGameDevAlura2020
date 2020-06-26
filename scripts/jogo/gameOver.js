@@ -13,7 +13,6 @@ class GameOver {
     exibe() {
         fill(this.corDeFundo);
         rect(0, 0, width, height);
-        noFill();
         
         image(this.imagem,
             this.x, this.y,

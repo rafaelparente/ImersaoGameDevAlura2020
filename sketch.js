@@ -1,24 +1,50 @@
 const propTamanhoTelaDeGameOver = 0.7;
 const corDeFundoTelaDeGameOver = 'rgba(0, 0, 0, 0.7)';
+const tempoDeFadeDoSomDeFundo = 3;
+
+const propTamanhoPontuacaoCenario = 0.1;
+const propPosicaoTelaDeGameOver = 0.85;
+const corDaPontuacao = '#fff';
 
 const numColsDeImagemPersonagem = 4;
-const numLinsDeImagemPersonagem = 4;
+const numSpritesDeImagemPersonagem = 16;
 const personagemPropAltura = 0.25;
-const personagemPropPulo = 0.05;
+const personagemPropPulo = 0.025;
 const personagemLimiteDePulo = 2;
+const personagemVariacaoY = -0.01;
 
 const numColsDeImagemInimigo = 4;
-const numLinsDeImagemInimigo = 7;
+const numSpritesDeImagemInimigo = 28;
 const inimigoPropAltura = 0.1;
 const inimigoPropMovimentacao = 0.01;
+const inimigoVariacaoY = -0.01;
+const inimigoValorEmPontos = 3;
+
+const numColsDeImagemInimigoGrande = 5;
+const numSpritesDeImagemInimigoGrande = 28;
+const inimigoGrandePropAltura = 0.42;
+const inimigoGrandePropMovimentacao = 0.005;
+const inimigoGrandeVariacaoY = 0.05;
+const inimigoGrandeValorEmPontos = 10;
+
+const numColsDeImagemInimigoVoador = 3;
+const numSpritesDeImagemInimigoVoador = 16;
+const inimigoVoadorPropAltura = 0.1;
+const inimigoVoadorPropMovimentacao = 0.0075;
+const inimigoVoadorVariacaoY = 0.15;
+const inimigoVoadorValorEmPontos = 1;
 
 const velocidadeAnimacao = 3;
 const precisaoDaColisao = 0.7;
-const propGravidade = 0.1;
+const propGravidade = 0.001;
+
+const inimigos = [];
 
 let imagemCenario;
 let imagemPersonagem;
 let imagemInimigo;
+let imagemInimigoGrande;
+let imagemInimigoVoador;
 let imagemGameOver;
 
 let somDoJogo;
@@ -27,7 +53,7 @@ let somDoPulo;
 let gameOver;
 let cenario;
 let personagem;
-let inimigo;
+let pontuacao;
 
 let isLooping = true;
 
@@ -36,6 +62,8 @@ function preload() {
     imagemCenario = loadImage('./imagens/cenario/floresta.png');
     imagemPersonagem = loadImage('./imagens/personagem/correndo.png');
     imagemInimigo = loadImage('./imagens/inimigos/gotinha.png');
+    imagemInimigoGrande = loadImage('./imagens/inimigos/troll.png');
+    imagemInimigoVoador = loadImage('./imagens/inimigos/gotinha-voadora.png');
 
     somDoJogo = loadSound('./sons/trilha_jogo.mp3');
     somDoPulo = loadSound('./sons/somPulo.mp3');
@@ -47,11 +75,20 @@ function setup() {
     gameOver = new GameOver(imagemGameOver, propTamanhoTelaDeGameOver, corDeFundoTelaDeGameOver);
     cenario = new Cenario(imagemCenario, velocidadeAnimacao);
     personagem = new Personagem(imagemPersonagem,
-        numColsDeImagemPersonagem, numLinsDeImagemPersonagem, personagemPropAltura,
-        velocidadeAnimacao, personagemPropPulo, propGravidade, precisaoDaColisao, personagemLimiteDePulo);
-    inimigo = new Inimigo(imagemInimigo,
-        numColsDeImagemInimigo, numLinsDeImagemInimigo, inimigoPropAltura,
-        velocidadeAnimacao, inimigoPropMovimentacao);
+        numColsDeImagemPersonagem, numSpritesDeImagemPersonagem, personagemPropAltura,
+        velocidadeAnimacao, personagemPropPulo, propGravidade, precisaoDaColisao, personagemLimiteDePulo, height, personagemVariacaoY);
+    pontuacao = new Pontuacao(propTamanhoPontuacaoCenario, corDaPontuacao);
+    
+    const inimigo = new Inimigo(imagemInimigo,
+        numColsDeImagemInimigo, numSpritesDeImagemInimigo, inimigoPropAltura,
+        velocidadeAnimacao, inimigoPropMovimentacao, height, inimigoVariacaoY, inimigoValorEmPontos);
+    const inimigoGrande = new Inimigo(imagemInimigoGrande,
+        numColsDeImagemInimigoGrande, numSpritesDeImagemInimigoGrande, inimigoGrandePropAltura,
+        velocidadeAnimacao, inimigoGrandePropMovimentacao, height, inimigoGrandeVariacaoY, inimigoGrandeValorEmPontos);
+    const inimigoVoador = new Inimigo(imagemInimigoVoador,
+        numColsDeImagemInimigoVoador, numSpritesDeImagemInimigoVoador, inimigoVoadorPropAltura,
+        velocidadeAnimacao, inimigoVoadorPropMovimentacao, 0.0, inimigoVoadorVariacaoY, inimigoVoadorValorEmPontos);
+    inimigos.push(inimigo, inimigoGrande, inimigoVoador);
     
     somDoJogo.loop();
 }
@@ -71,13 +108,23 @@ function draw() {
     personagem.exibe();
     personagem.aplicaGravidade();
 
-    inimigo.exibe();
-    inimigo.move();
+    inimigos.forEach(inimigo => {
+        inimigo.exibe();
+        const pontos = inimigo.move();
+        pontuacao.adicionarPonto(pontos);
 
-    if (personagem.estaColidindo(inimigo)) {
-        isLooping = false;
+        if (personagem.estaColidindo(inimigo)) {
+            isLooping = false;
+        }
+    });
+
+    if (isLooping) {
+        pontuacao.exibe();
+    }
+    else {
         gameOver.exibe();
-        somDoJogo.setVolume(0, 3);
+        pontuacao.exibe(CENTER, width / 2.0, height * propPosicaoTelaDeGameOver);
+        somDoJogo.setVolume(0, tempoDeFadeDoSomDeFundo);
         noLoop();
     }
 }
