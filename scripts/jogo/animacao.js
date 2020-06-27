@@ -47,7 +47,7 @@ class Animacao {
     atualizaFrame() {
         this.frameSkip = ++this.frameSkip % this.velocidadeAnimacao;
         
-        if (this.frameSkip == 0) {
+        if (this.frameSkip === 0) {
             this.frameAtual = ++this.frameAtual % this.matriz.length;
         }
     }

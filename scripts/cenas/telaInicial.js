@@ -1,4 +1,4 @@
-class GameStart {
+class TelaInicial {
 
     constructor(texto, propTamanho, corDeFundo, corDoTexto) {
         this.texto = texto;
@@ -12,6 +12,24 @@ class GameStart {
     }
 
     exibe() {
+        fill(this.corDeFundo);
+        rect(0, 0, width, height);
+
+        textAlign(CENTER);
+        textSize(this.textSize);
+        fill(this.corDoTexto);
+        text(this.texto, this.x, this.y, this.largura, this.altura);
+    }
+
+    setup() {
+
+    }
+
+    keyPressed(key) {
+        
+    }
+
+    draw() {
         fill(this.corDeFundo);
         rect(0, 0, width, height);
 

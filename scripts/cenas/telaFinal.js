@@ -1,4 +1,4 @@
-class GameOver {
+class TelaFinal {
 
     constructor(imagem, propTamanho, corDeFundo, texto, propTamanhoDoTexto, corDoTexto, propPosicaoTexto) {
         this.imagem = imagem;
@@ -17,6 +17,28 @@ class GameOver {
     }
 
     exibe() {
+        fill(this.corDeFundo);
+        rect(0, 0, width, height);
+        
+        image(this.imagem,
+            this.x, this.y,
+            this.largura, this.altura);
+
+        textAlign(CENTER);
+        textSize(this.textSize);
+        fill(this.corDoTexto);
+        text(this.texto, this.xDoTexto, this.yDoTexto);
+    }
+
+    setup() {
+
+    }
+
+    keyPressed(key) {
+
+    }
+
+    draw() {
         fill(this.corDeFundo);
         rect(0, 0, width, height);
         

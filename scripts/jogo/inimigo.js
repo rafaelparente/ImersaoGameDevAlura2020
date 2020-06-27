@@ -4,8 +4,12 @@ class Inimigo extends Animacao {
         super(imagem, numCols, numSprites, propAltura, velocidadeAnimacao, chaoAltura, 1.0, variacaoY);
 
         this.xInicial = this.x;
-        this.velocidadeMovimentacao = width * inimigoPropMovimentacao;
+        this.alteraVelocidadeMovimentacao(inimigoPropMovimentacao);
         this.valorEmPontos = valorEmPontos;
+    }
+
+    alteraVelocidadeMovimentacao(inimigoPropMovimentacao) {
+        this.velocidadeMovimentacao = width * inimigoPropMovimentacao;
     }
 
     move() {
