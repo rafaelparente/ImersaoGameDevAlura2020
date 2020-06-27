@@ -3,8 +3,10 @@ class GameStart {
     constructor(texto, propTamanho, corDeFundo, corDoTexto) {
         this.texto = texto;
         this.textSize = propTamanho * height;
-        this.x = width / 2.0;
-        this.y = height / 2.0;
+        this.largura = width / 2.0;
+        this.altura = height / 2.0;
+        this.x = (width - this.largura) / 2.0;
+        this.y = (height - this.altura) / 2.0;
         this.corDeFundo = corDeFundo;
         this.corDoTexto = corDoTexto;
     }
@@ -16,7 +18,7 @@ class GameStart {
         textAlign(CENTER);
         textSize(this.textSize);
         fill(this.corDoTexto);
-        text(this.texto, this.x, this.y);
+        text(this.texto, this.x, this.y, this.largura, this.altura);
     }
 
 }

@@ -14,6 +14,7 @@ const propPosicaoTextoDeGameOver = 0.85;
 const propTamanhoPontuacaoCenario = 0.1;
 const propPosicaoPontuacaoDeGameOver = 0.15;
 const corDaPontuacao = '#fff';
+const textoDePontuacaoGameOver = 'Pontuação final\n';
 
 const numColsDeImagemPersonagem = 4;
 const numSpritesDeImagemPersonagem = 16;
@@ -140,7 +141,7 @@ function draw() {
     }
     else if (somDoJogo.isLooping()) {
         gameOver.exibe();
-        pontuacao.exibe(CENTER, width / 2.0, height * propPosicaoPontuacaoDeGameOver, 'Pontuação final\n');
+        pontuacao.exibe(CENTER, width / 2.0, height * propPosicaoPontuacaoDeGameOver, textoDePontuacaoGameOver);
         somDoJogo.setVolume(0, tempoDeFadeDoSomDeFundo);
         noLoop();
     }
