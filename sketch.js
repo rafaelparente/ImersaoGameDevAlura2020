@@ -1,9 +1,18 @@
+const textoDeGameStart = "Aperte ESPAÇO para iniciar!";
+const propTamanhoGameStart = 0.1;
+const corDeFundoTelaDeGameStart = 'rgba(0, 0, 0, 0.7)';
+const corDeGameStart = '#fff';
+
 const propTamanhoTelaDeGameOver = 0.7;
 const corDeFundoTelaDeGameOver = 'rgba(0, 0, 0, 0.7)';
 const tempoDeFadeDoSomDeFundo = 3;
+const textoDeGameOver = "Obrigado por jogar!";
+const propTamanhoGameOverTexto = 0.05;
+const corDeGameOverTexto = '#fff';
+const propPosicaoTextoDeGameOver = 0.85;
 
 const propTamanhoPontuacaoCenario = 0.1;
-const propPosicaoTelaDeGameOver = 0.85;
+const propPosicaoPontuacaoDeGameOver = 0.15;
 const corDaPontuacao = '#fff';
 
 const numColsDeImagemPersonagem = 4;
@@ -50,12 +59,13 @@ let imagemGameOver;
 let somDoJogo;
 let somDoPulo;
 
+let gameStart;
 let gameOver;
 let cenario;
 let personagem;
 let pontuacao;
 
-let isLooping = true;
+let estaDesenhando = false;
 
 function preload() {
     imagemGameOver = loadImage('./imagens/assets/game-over.png');
@@ -72,7 +82,8 @@ function preload() {
 function setup() {
     createCanvas(windowWidth, windowHeight);
 
-    gameOver = new GameOver(imagemGameOver, propTamanhoTelaDeGameOver, corDeFundoTelaDeGameOver);
+    gameStart = new GameStart(textoDeGameStart, propTamanhoGameStart, corDeFundoTelaDeGameStart, corDeGameStart);
+    gameOver = new GameOver(imagemGameOver, propTamanhoTelaDeGameOver, corDeFundoTelaDeGameOver, textoDeGameOver, propTamanhoGameOverTexto, corDeGameOverTexto, propPosicaoTextoDeGameOver);
     cenario = new Cenario(imagemCenario, velocidadeAnimacao);
     personagem = new Personagem(imagemPersonagem,
         numColsDeImagemPersonagem, numSpritesDeImagemPersonagem, personagemPropAltura,
@@ -89,13 +100,19 @@ function setup() {
         numColsDeImagemInimigoVoador, numSpritesDeImagemInimigoVoador, inimigoVoadorPropAltura,
         velocidadeAnimacao, inimigoVoadorPropMovimentacao, 0.0, inimigoVoadorVariacaoY, inimigoVoadorValorEmPontos);
     inimigos.push(inimigo, inimigoGrande, inimigoVoador);
-    
-    somDoJogo.loop();
+
+    noLoop();
 }
 
 function keyPressed() {
-    if (key == ' ' && isLooping) {
-        if (personagem.pula()) {
+    if (key == ' ') {
+        if (!somDoJogo.isLooping()) {
+            estaDesenhando = true;
+            somDoJogo.loop();
+            loop();
+        }
+        
+        if (estaDesenhando && personagem.pula()) {
             somDoPulo.play();
         }
     }
@@ -114,17 +131,20 @@ function draw() {
         pontuacao.adicionarPonto(pontos);
 
         if (personagem.estaColidindo(inimigo)) {
-            isLooping = false;
+            estaDesenhando = false;
         }
     });
 
-    if (isLooping) {
+    if (estaDesenhando) {
         pontuacao.exibe();
     }
-    else {
+    else if (somDoJogo.isLooping()) {
         gameOver.exibe();
-        pontuacao.exibe(CENTER, width / 2.0, height * propPosicaoTelaDeGameOver);
+        pontuacao.exibe(CENTER, width / 2.0, height * propPosicaoPontuacaoDeGameOver, 'Pontuação final\n');
         somDoJogo.setVolume(0, tempoDeFadeDoSomDeFundo);
         noLoop();
+    }
+    else {
+        gameStart.exibe();
     }
 }
