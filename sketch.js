@@ -39,7 +39,7 @@ const inimigoGrandeValorEmPontos = 10;
 const numColsDeImagemInimigoVoador = 3;
 const numSpritesDeImagemInimigoVoador = 16;
 const inimigoVoadorPropAltura = 0.1;
-const inimigoVoadorPropMovimentacao = 0.0075;
+const inimigoVoadorPropMovimentacao = 0.005;
 const inimigoVoadorVariacaoY = 0.15;
 const inimigoVoadorValorEmPontos = 1;
 

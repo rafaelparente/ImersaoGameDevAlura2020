@@ -7,8 +7,9 @@ class Personagem extends AnimacaoPulante {
         this.aceleracaoDoPulo = -height * personagemPropPulo;
         this.gravidade = height * propGravidade;
         this.velocidadeDoPulo = 0;
-        this.larguraDeColisao = this.largura * precisaoDaColisao;
-        this.alturaDeColisao = this.altura * precisaoDaColisao;
+        this.baseXDeColisao = this.largura / 2.0;
+        this.baseYDeColsao = this.altura / 2.0;
+        this.diametroDeColisao = max(this.largura, this.altura) * precisaoDaColisao;
         this.precisaoDaColisao = precisaoDaColisao;
         this.limiteDePulo = limiteDePulo;
     }
@@ -36,14 +37,14 @@ class Personagem extends AnimacaoPulante {
     }
 
     estaColidindo(inimigo) {
-        const larguraDeColisaoDoInimigo = inimigo.largura * this.precisaoDaColisao;
-        const alturaDeColisaoDoInimigo = inimigo.altura * this.precisaoDaColisao;
+        const xDeColisaoDoInimigo = inimigo.x + inimigo.largura / 2.0;
+        const yDeColisaoDoInimigo = inimigo.y + inimigo.altura / 2.0;
+        const diametroDeColisaoDoInimigo = max(inimigo.largura, inimigo.altura) * precisaoDaColisao;
 
-        return collideRectRect(
-            this.x, this.y,
-            this.larguraDeColisao, this.alturaDeColisao,
-            inimigo.x, inimigo.y,
-            larguraDeColisaoDoInimigo, alturaDeColisaoDoInimigo);
+        return collideCircleCircle(
+            this.x + this.baseXDeColisao, this.y + this.baseYDeColsao, this.diametroDeColisao,
+            xDeColisaoDoInimigo, yDeColisaoDoInimigo, diametroDeColisaoDoInimigo
+        )
     }
 
 }
