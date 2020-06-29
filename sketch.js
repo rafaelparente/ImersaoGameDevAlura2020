@@ -1,29 +1,20 @@
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    telaInicial = new TelaInicial(textoDeTelaInicial, propTamanhoTelaInicial, corDeFundoTelaDeTelaInicial, corDeTelaInicial);
+    telaInicial = new TelaInicial(imagemTelaInicial, fonteTelaInicial);
     jogo = new Jogo();
-    telaFinal = new TelaFinal(imagemTelaFinal, propTamanhoTelaDeTelaFinal, corDeFundoTelaDeTelaFinal, textoDeTelaFinal, propTamanhoTelaFinalTexto, corDeTelaFinalTexto, propPosicaoTextoDeTelaFinal);
+    telaFinal = new TelaFinal(imagemTelaFinal, fonteTelaFinal);
     cenas = {
-        'jogo':jogo,
-        'telaInicial':telaInicial,
-        'telaFinal':telaFinal,
+        jogo,
+        telaInicial,
+        telaFinal,
     }
-    cenas[cenaAtual].setup();
-    noLoop();
+    GerenciadorDeTelaInicial._alteraCena();
 }
 
 function keyPressed() {
-    if (key === ' ' && !jogo.estaIniciado()) {
-        jogo.iniciaJogo();
-        loop();
-    }
-
     cenas[cenaAtual].keyPressed(key);
 }
 
 function draw() {
-    if (!cenas[cenaAtual].draw()) {
-        jogo.encerraJogo();
-        noLoop();
-    }
+    cenas[cenaAtual].draw()
 }

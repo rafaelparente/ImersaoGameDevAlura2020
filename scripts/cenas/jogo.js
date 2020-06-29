@@ -1,16 +1,16 @@
 class Jogo {
 
     constructor() {
-        this.estaDesenhando = false;
-        this.inimigoAtual = 0;
     }
 
     setup() {
-        cenario = new Cenario(imagemCenario, velocidadeAnimacao);
-        personagem = new Personagem(imagemPersonagem,
+        this.inimigoAtual = 0;
+
+        this.cenario = new Cenario(imagemCenario, velocidadeAnimacao);
+        this.personagem = new Personagem(imagemPersonagem,
             numColsDeImagemPersonagem, numSpritesDeImagemPersonagem, personagemPropAltura,
             velocidadeAnimacao, personagemPropPulo, propGravidade, precisaoDaColisao, personagemLimiteDePulo, height, personagemVariacaoY);
-        pontuacao = new Pontuacao(propTamanhoPontuacaoCenario, corDaPontuacao);
+        this.pontuacao = new Pontuacao(propTamanhoPontuacaoCenario, corDaPontuacao);
         
         const inimigo = new Inimigo(imagemInimigo,
             numColsDeImagemInimigo, numSpritesDeImagemInimigo, inimigoPropAltura,
@@ -21,64 +21,48 @@ class Jogo {
         const inimigoVoador = new Inimigo(imagemInimigoVoador,
             numColsDeImagemInimigoVoador, numSpritesDeImagemInimigoVoador, inimigoVoadorPropAltura,
             velocidadeAnimacao, inimigoVoadorPropMovimentacao, 0.0, inimigoVoadorVariacaoY, inimigoVoadorValorEmPontos);
-        inimigos.push(inimigo, inimigoGrande, inimigoVoador);
+        this.inimigos = [inimigo, inimigoGrande, inimigoVoador];
+
+        somDoJogo.stop();
+        somDoJogo.setVolume(0.0);
+        somDoJogo.loop();
+        somDoJogo.setVolume(1.0, tempoDeFadeDoSomDeFundo);
     }
 
     keyPressed(key) {
         if (key === ' ' &&
-            this.estaDesenhando &&
-            personagem.pula()) {
+            this.personagem.pula()) {
             somDoPulo.play();
         }
     }
 
     draw() {
-        cenario.exibe();
-        cenario.anima();
+        this.cenario.exibe();
+        this.cenario.anima();
 
-        personagem.exibe();
-        personagem.aplicaGravidade();
+        this.personagem.exibe();
+        this.personagem.aplicaGravidade();
 
-        const inimigo = inimigos[this.inimigoAtual];
+        const inimigo = this.inimigos[this.inimigoAtual];
         inimigo.exibe();
         const pontos = inimigo.move();
         
         if (pontos > 0) {
-            pontuacao.adicionarPonto(pontos);
-            this.inimigoAtual = Math.floor(Math.random() * inimigos.length);
-            inimigos[this.inimigoAtual].alteraVelocidadeMovimentacao(random(0.01, 0.02));
+            this.pontuacao.adicionarPonto(pontos);
+            this.pontuacao.exibe();
+            
+            this.inimigoAtual = Math.floor(Math.random() * this.inimigos.length);
+            this.inimigos[this.inimigoAtual].alteraVelocidadeMovimentacao(random(0.01, 0.02));
+            return;
         }
 
-        if (personagem.estaColidindo(inimigo)) {
-            this.estaDesenhando = false;
-        }
-
-        if (this.estaDesenhando) {
-            pontuacao.exibe();
-        }
-        else if (!this.estaIniciado()) {
-            telaInicial.exibe();
+        if (this.personagem.estaColidindo(inimigo)) {
+            GerenciadorDeTelaFinal._alteraCena();
+            somDoJogo.setVolume(0.0, tempoDeFadeDoSomDeFundo);
         }
         else {
-            return false;
+            this.pontuacao.exibe();
         }
-
-        return true;
-    }
-
-    estaIniciado() {
-        return somDoJogo.isLooping();
-    }
-
-    iniciaJogo() {
-        this.estaDesenhando = true;
-        somDoJogo.loop();
-    }
-
-    encerraJogo() {
-        telaFinal.exibe();
-        pontuacao.exibe(CENTER, width / 2.0, height * propPosicaoPontuacaoDeTelaFinal, textoDePontuacaoTelaFinal);
-        somDoJogo.setVolume(0, tempoDeFadeDoSomDeFundo);
     }
 
 }

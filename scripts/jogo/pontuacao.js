@@ -1,7 +1,7 @@
 class Pontuacao {
 
     constructor(propTamanho, corDaPontuacao) {
-        this.pontos = 0;
+        totalPontos = 0;
         this.textSize = propTamanho * height;
         this.x = width - 0.25 * this.textSize;
         this.y = this.textSize;
@@ -12,11 +12,11 @@ class Pontuacao {
         textAlign(align);
         textSize(this.textSize);
         fill(this.corDaPontuacao);
-        text(titulo + this.pontos.toString(), x, y);
+        text(titulo + totalPontos.toString(), x, y);
     }
 
     adicionarPonto(pontos) {
-        this.pontos += pontos;
+        totalPontos += pontos;
     }
 
 }
