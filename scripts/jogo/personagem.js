@@ -12,6 +12,7 @@ class Personagem extends AnimacaoPulante {
         this.diametroDeColisao = max(this.largura, this.altura) * precisaoDaColisao;
         this.precisaoDaColisao = precisaoDaColisao;
         this.limiteDePulo = limiteDePulo;
+        this.invencivel = false;
     }
 
     pula() {
@@ -36,7 +37,13 @@ class Personagem extends AnimacaoPulante {
         }
     }
 
+    tornaInvencivel(invencivel = true) {
+        this.invencivel = invencivel;
+    }
+
     estaColidindo(inimigo) {
+        if (this.invencivel) return false;
+
         const xDeColisaoDoInimigo = inimigo.x + inimigo.largura / 2.0;
         const yDeColisaoDoInimigo = inimigo.y + inimigo.altura / 2.0;
         const diametroDeColisaoDoInimigo = max(inimigo.largura, inimigo.altura) * precisaoDaColisao;

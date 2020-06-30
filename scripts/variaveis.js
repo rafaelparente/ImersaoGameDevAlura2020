@@ -1,5 +1,6 @@
 let imagemTelaInicial;
 let imagemCenario;
+let imagemVida;
 let imagemPersonagem;
 let imagemInimigo;
 let imagemInimigoGrande;

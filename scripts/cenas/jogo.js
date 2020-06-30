@@ -7,10 +7,11 @@ class Jogo {
         this.inimigoAtual = 0;
 
         this.cenario = new Cenario(imagemCenario, velocidadeAnimacao);
+        this.vida = new Vida(imagemVida, maximoDeVidas, vidasIniciais, propTamanhoVida, propMargemVida);
+        this.pontuacao = new Pontuacao(propTamanhoPontuacaoCenario, corDaPontuacao);
         this.personagem = new Personagem(imagemPersonagem,
             numColsDeImagemPersonagem, numSpritesDeImagemPersonagem, personagemPropAltura,
             velocidadeAnimacao, personagemPropPulo, propGravidade, precisaoDaColisao, personagemLimiteDePulo, height, personagemVariacaoY);
-        this.pontuacao = new Pontuacao(propTamanhoPontuacaoCenario, corDaPontuacao);
         
         const inimigo = new Inimigo(imagemInimigo,
             numColsDeImagemInimigo, numSpritesDeImagemInimigo, inimigoPropAltura,
@@ -49,20 +50,28 @@ class Jogo {
         
         if (pontos > 0) {
             this.pontuacao.adicionarPonto(pontos);
-            this.pontuacao.exibe();
-            
-            this.inimigoAtual = Math.floor(Math.random() * this.inimigos.length);
-            this.inimigos[this.inimigoAtual].alteraVelocidadeMovimentacao(random(0.01, 0.02));
-            return;
+            this.personagem.tornaInvencivel(false);
+            this._mudaInimigo();
+        }
+        else if (this.personagem.estaColidindo(inimigo)) {
+            this.vida.perdeVida();
+
+            if (this.vida.vidas == 0) {
+                GerenciadorDeTelaFinal._alteraCena();
+                somDoJogo.setVolume(0.0, tempoDeFadeDoSomDeFundo);
+                return;
+            }
+
+            this.personagem.tornaInvencivel();
         }
 
-        if (this.personagem.estaColidindo(inimigo)) {
-            GerenciadorDeTelaFinal._alteraCena();
-            somDoJogo.setVolume(0.0, tempoDeFadeDoSomDeFundo);
-        }
-        else {
-            this.pontuacao.exibe();
-        }
+        this.vida.exibe();
+        this.pontuacao.exibe();
+    }
+
+    _mudaInimigo() {
+        this.inimigoAtual = Math.floor(Math.random() * this.inimigos.length);
+        this.inimigos[this.inimigoAtual].alteraVelocidadeMovimentacao(random(0.01, 0.02));
     }
 
 }

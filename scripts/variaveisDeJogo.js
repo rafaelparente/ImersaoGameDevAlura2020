@@ -34,3 +34,8 @@ const inimigoVoadorValorEmPontos = 1;
 const velocidadeAnimacao = 3;
 const precisaoDaColisao = 0.7;
 const propGravidade = 0.001;
+
+const maximoDeVidas = 3;
+const vidasIniciais = 3;
+const propTamanhoVida = 0.1;
+const propMargemVida = 0.1;
