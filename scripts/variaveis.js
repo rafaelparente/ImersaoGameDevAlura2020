@@ -1,3 +1,5 @@
+let fita;
+
 let imagemTelaInicial;
 let imagemCenario;
 let imagemVida;

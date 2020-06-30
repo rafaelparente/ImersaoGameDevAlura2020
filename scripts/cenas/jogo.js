@@ -46,6 +46,9 @@ class Jogo {
         const inimigo = this.inimigos[this.inimigoAtual];
         inimigo.exibe();
         const pontos = inimigo.move();
+
+        this.cenario.exibeFrente();
+        this.cenario.animaFrente();
         
         if (pontos > 0) {
             this.pontuacao.adicionarPonto(pontos);

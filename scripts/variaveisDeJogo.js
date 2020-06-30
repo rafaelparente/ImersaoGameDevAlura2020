@@ -1,5 +1,3 @@
-let fita;
-
 const propTamanhoVida = 0.1;
 const propMargemVida = 0.01;
 const propTamanhoPontuacaoCenario = 0.1;
@@ -12,7 +10,7 @@ const personagemVariacaoY = -0.01;
 
 const numColsDeImagemInimigo = 4;
 const numSpritesDeImagemInimigo = 28;
-const inimigoPropAltura = 0.1;
+const inimigoPropAltura = 0.15;
 const inimigoVariacaoY = -0.01;
 
 const numColsDeImagemInimigoGrande = 5;
