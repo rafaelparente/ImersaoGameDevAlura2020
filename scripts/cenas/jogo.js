@@ -4,25 +4,24 @@ class Jogo {
     }
 
     setup() {
-        this.inimigoAtual = 0;
-
         this.cenario = new Cenario(imagemCenario, velocidadeAnimacao);
-        this.vida = new Vida(imagemVida, maximoDeVidas, vidasIniciais, propTamanhoVida, propMargemVida);
+        this.vida = new Vida(imagemVida, fita.config.maximoDeVidas, fita.config.vidasIniciais, propTamanhoVida, propMargemVida);
         this.pontuacao = new Pontuacao(propTamanhoPontuacaoCenario, corDaPontuacao);
         this.personagem = new Personagem(imagemPersonagem,
             numColsDeImagemPersonagem, numSpritesDeImagemPersonagem, personagemPropAltura,
-            velocidadeAnimacao, personagemPropPulo, propGravidade, precisaoDaColisao, personagemLimiteDePulo, height, personagemVariacaoY);
+            velocidadeAnimacao, fita.config.personagemPropPulo, fita.config.propGravidade, precisaoDaColisao, fita.config.personagemLimiteDePulo, height, personagemVariacaoY);
         
         const inimigo = new Inimigo(imagemInimigo,
             numColsDeImagemInimigo, numSpritesDeImagemInimigo, inimigoPropAltura,
-            velocidadeAnimacao, inimigoPropMovimentacao, height, inimigoVariacaoY, inimigoValorEmPontos);
+            velocidadeAnimacao, height, inimigoVariacaoY, fita.config.inimigoValorEmPontos);
         const inimigoGrande = new Inimigo(imagemInimigoGrande,
             numColsDeImagemInimigoGrande, numSpritesDeImagemInimigoGrande, inimigoGrandePropAltura,
-            velocidadeAnimacao, inimigoGrandePropMovimentacao, height, inimigoGrandeVariacaoY, inimigoGrandeValorEmPontos);
+            velocidadeAnimacao, height, inimigoGrandeVariacaoY, fita.config.inimigoGrandeValorEmPontos);
         const inimigoVoador = new Inimigo(imagemInimigoVoador,
             numColsDeImagemInimigoVoador, numSpritesDeImagemInimigoVoador, inimigoVoadorPropAltura,
-            velocidadeAnimacao, inimigoVoadorPropMovimentacao, 0.0, inimigoVoadorVariacaoY, inimigoVoadorValorEmPontos);
+            velocidadeAnimacao, 0.0, inimigoVoadorVariacaoY, fita.config.inimigoVoadorValorEmPontos);
         this.inimigos = [inimigo, inimigoGrande, inimigoVoador];
+        this._mudaInimigo();
 
         somDoJogo.stop();
         somDoJogo.setVolume(0.0);
@@ -71,7 +70,8 @@ class Jogo {
 
     _mudaInimigo() {
         this.inimigoAtual = Math.floor(Math.random() * this.inimigos.length);
-        this.inimigos[this.inimigoAtual].alteraVelocidadeMovimentacao(random(0.01, 0.02));
+        const inimigo = this.inimigos[this.inimigoAtual];
+        inimigo.alteraVelocidadeMovimentacao(random(0.01, 0.02));
     }
 
 }

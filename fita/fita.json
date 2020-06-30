@@ -1,0 +1,12 @@
+{
+    "config": {
+        "maximoDeVidas": 5,
+        "vidasIniciais": 5,
+        "personagemPropPulo": 0.025,
+        "propGravidade": 0.001,
+        "personagemLimiteDePulo": 2,
+        "inimigoValorEmPontos": 3,
+        "inimigoGrandeValorEmPontos": 10,
+        "inimigoVoadorValorEmPontos": 1
+    }
+}
